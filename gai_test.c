@@ -188,13 +188,17 @@ int main(int argc, char *argv[]) {
 		default:             printf("SOCK %-9d ", tmp->ai_socktype); break;
 		}
 
-		switch (tmp->ai_protocol) {
-		case IPPROTO_DCCP:    printf("IPPROTO_DCCP    "); break;
-		case IPPROTO_SCTP:    printf("IPPROTO_SCTP    "); break;
-		case IPPROTO_TCP:     printf("IPPROTO_TCP     "); break;
-		case IPPROTO_UDP:     printf("IPPROTO_UDP     "); break;
-		case IPPROTO_UDPLITE: printf("IPPROTO_UDPLITE "); break;
-		default:              printf("PROTO %-9d ", tmp->ai_protocol); break;
+		if (tmp->ai_family == AF_INET || tmp->ai_family == AF_INET6) {
+			switch (tmp->ai_protocol) {
+			case IPPROTO_DCCP:    printf("IPPROTO_DCCP    "); break;
+			case IPPROTO_SCTP:    printf("IPPROTO_SCTP    "); break;
+			case IPPROTO_TCP:     printf("IPPROTO_TCP     "); break;
+			case IPPROTO_UDP:     printf("IPPROTO_UDP     "); break;
+			case IPPROTO_UDPLITE: printf("IPPROTO_UDPLITE "); break;
+			default:              printf("PROTO %-9d ", tmp->ai_protocol); break;
+			}
+		} else {
+			printf("PROTO %-9d ", tmp->ai_protocol);
 		}
 
 		ret = getnameinfo(tmp->ai_addr, tmp->ai_addrlen,
