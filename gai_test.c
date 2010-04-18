@@ -29,17 +29,27 @@ static const struct option long_options[] = {
 	{ "AF_INET", 0, NULL, '4' },
 	{ "AF_INET6", 0, NULL, '6' },
 
+#ifdef SOCK_DCCP
 	{ "SOCK_DCCP", 0, NULL, 'D' },
+#endif
 	{ "SOCK_DGRAM", 0, NULL, 'd' },
 	{ "SOCK_RAW", 0, NULL, 'R' },
+#ifdef SOCK_SEQPACKET
 	{ "SOCK_SEQPACKET", 0, NULL, 'S' },
+#endif
 	{ "SOCK_STREAM", 0, NULL, 's' },
 
+#ifdef IPPROTO_DCCP
 	{ "IPPROTO_DCCP", 0, NULL, 'C' },
+#endif
+#ifdef IPPROTO_SCTP
 	{ "IPPROTO_SCTP", 0, NULL, 'P' },
+#endif
 	{ "IPPROTO_TCP", 0, NULL, 't' },
 	{ "IPPROTO_UDP", 0, NULL, 'u' },
+#ifdef IPPROTO_UDPLITE
 	{ "IPPROTO_UDPLITE", 0, NULL, 'L' },
+#endif
 
 	{ "AI_ADDRCONFIG", 0, NULL, 'l' },
 	{ "AI_ALL", 0, NULL, 'a' },
@@ -63,18 +73,28 @@ static void help(FILE *out, const char *name) {
 			fprintf(out, "        -6 AF_INET6\n");
 			fprintf(out, "\n");
 			fprintf(out, "Socket Type:\n");
+#ifdef SOCK_DCCP
 			fprintf(out, "        -D SOCK_DCCP\n");
+#endif
 			fprintf(out, "        -d SOCK_DGRAM\n");
 			fprintf(out, "        -R SOCK_RAW\n");
+#ifdef SOCK_SEQPACKET
 			fprintf(out, "        -S SOCK_SEQPACKET\n");
+#endif
 			fprintf(out, "        -s SOCK_STREAM\n");
 			fprintf(out, "\n");
 			fprintf(out, "Protocol:\n");
+#ifdef IPPROTO_DCCP
 			fprintf(out, "        -C IPPROTO_DCCP\n");
+#endif
+#ifdef IPPROTO_SCTP
 			fprintf(out, "        -P IPPROTO_SCTP\n");
+#endif
 			fprintf(out, "        -t IPPROTO_TCP\n");
 			fprintf(out, "        -u IPPROTO_UDP\n");
+#ifdef IPPROTO_UDPLITE
 			fprintf(out, "        -L IPPROTO_UDPLITE\n");
+#endif
 			fprintf(out, "\n");
 			fprintf(out, "Flags:\n");
 			fprintf(out, "        -l AI_ADDRCONFIG\n");
@@ -114,17 +134,27 @@ int main(int argc, char *argv[]) {
 		case '4': hints.ai_family = AF_INET; break;
 		case '6': hints.ai_family = AF_INET6; break;
 
+#ifdef SOCK_DCCP
 		case 'D': hints.ai_socktype = SOCK_DCCP; break;
+#endif
 		case 'd': hints.ai_socktype = SOCK_DGRAM; break;
 		case 'R': hints.ai_socktype = SOCK_RAW; break;
+#ifdef SOCK_SEQPACKET
 		case 'S': hints.ai_socktype = SOCK_SEQPACKET; break;
+#endif
 		case 's': hints.ai_socktype = SOCK_STREAM; break;
 
+#ifdef IPPROTO_DCCP
 		case 'C': hints.ai_protocol = IPPROTO_DCCP; break;
+#endif
+#ifdef IPPROTO_SCTP
 		case 'P': hints.ai_protocol = IPPROTO_SCTP; break;
+#endif
 		case 't': hints.ai_protocol = IPPROTO_TCP; break;
 		case 'u': hints.ai_protocol = IPPROTO_UDP; break;
+#ifdef IPPROTO_UDPLITE
 		case 'L': hints.ai_protocol = IPPROTO_UDPLITE; break;
+#endif
 
 		case 'l': hints.ai_flags |= AI_ADDRCONFIG; break;
 		case 'a': hints.ai_flags |= AI_ALL; break;
@@ -180,21 +210,31 @@ int main(int argc, char *argv[]) {
 		}
 
 		switch (tmp->ai_socktype) {
+#ifdef SOCK_DCCP
 		case SOCK_DCCP:      printf("SOCK_DCCP      "); break;
+#endif
 		case SOCK_DGRAM:     printf("SOCK_DGRAM     "); break;
 		case SOCK_RAW:       printf("SOCK_RAW       "); break;
+#ifdef SOCK_SEQPACKET
 		case SOCK_SEQPACKET: printf("SOCK_SEQPACKET "); break;
+#endif
 		case SOCK_STREAM:    printf("SOCK_STREAM    "); break;
 		default:             printf("SOCK %-9d ", tmp->ai_socktype); break;
 		}
 
 		if (tmp->ai_family == AF_INET || tmp->ai_family == AF_INET6) {
 			switch (tmp->ai_protocol) {
+#ifdef IPPROTO_DCCP
 			case IPPROTO_DCCP:    printf("IPPROTO_DCCP    "); break;
+#endif
+#ifdef IPPROTO_SCTP
 			case IPPROTO_SCTP:    printf("IPPROTO_SCTP    "); break;
+#endif
 			case IPPROTO_TCP:     printf("IPPROTO_TCP     "); break;
 			case IPPROTO_UDP:     printf("IPPROTO_UDP     "); break;
+#ifdef IPPROTO_UDPLITE
 			case IPPROTO_UDPLITE: printf("IPPROTO_UDPLITE "); break;
+#endif
 			default:              printf("PROTO %-9d ", tmp->ai_protocol); break;
 			}
 		} else {
