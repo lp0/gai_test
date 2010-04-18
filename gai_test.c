@@ -51,17 +51,33 @@ static const struct option long_options[] = {
 	{ "IPPROTO_UDPLITE", 0, NULL, 'L' },
 #endif
 
+#ifdef AI_ADDRCONFIG
 	{ "AI_ADDRCONFIG", 0, NULL, 'l' },
+#endif
+#ifdef AI_ALL
 	{ "AI_ALL", 0, NULL, 'a' },
+#endif
+#ifdef AI_CANONIDN
 	{ "AI_CANONIDN", 0, NULL, 'c' },
+#endif
 	{ "AI_CANONNAME", 0, NULL, 'N' },
+#ifdef AI_IDN
 	{ "AI_IDN", 0, NULL, 'i' },
+#endif
+#ifdef AI_IDN_ALLOW_UNASSIGNED
 	{ "AI_IDN_ALLOW_UNASSIGNED", 0, NULL, 'U' },
+#endif
+#ifdef AI_IDN_USE_STD3_ASCII_RULES
 	{ "AI_IDN_USE_STD3_ASCII_RULES", 0, NULL, '3' },
+#endif
 	{ "AI_NUMERICHOST", 0, NULL, 'n' },
+#ifdef AI_NUMERICSERV
 	{ "AI_NUMERICSERV", 0, NULL, 'v' },
+#endif
 	{ "AI_PASSIVE", 0, NULL, 'p' },
+#ifdef AI_V4MAPPED
 	{ "AI_V4MAPPED", 0, NULL, 'm' }
+#endif
 };
 
 static void help(FILE *out, const char *name) {
@@ -97,17 +113,33 @@ static void help(FILE *out, const char *name) {
 #endif
 			fprintf(out, "\n");
 			fprintf(out, "Flags:\n");
+#ifdef AI_ADDRCONFIG
 			fprintf(out, "        -l AI_ADDRCONFIG\n");
+#endif
+#ifdef AI_ALL
 			fprintf(out, "        -a AI_ALL\n");
+#endif
+#ifdef AI_CANONIDN
 			fprintf(out, "        -c AI_CANONIDN\n");
+#endif
 			fprintf(out, "        -N AI_CANONNAME\n");
+#ifdef AI_IDN
 			fprintf(out, "        -i AI_IDN\n");
+#endif
+#ifdef AI_IDN_ALLOW_UNASSIGNED
 			fprintf(out, "        -U AI_IDN_ALLOW_UNASSIGNED\n");
+#endif
+#ifdef AI_IDN_USE_STD3_ASCII_RULES
 			fprintf(out, "        -3 AI_IDN_USE_STD3_ASCII_RULES\n");
+#endif
 			fprintf(out, "        -n AI_NUMERICHOST\n");
+#ifdef AI_NUMERICSERV
 			fprintf(out, "        -v AI_NUMERICSERV\n");
+#endif
 			fprintf(out, "        -p AI_PASSIVE\n");
+#ifdef AI_V4MAPPED
 			fprintf(out, "        -m AI_V4MAPPED\n");
+#endif
 			fprintf(out, "\n");
 			fprintf(out, "Options may also be specified in long (--) form by name\n");
 			fprintf(out, "For NULL node or service, specify \"\" or \"-\"\n");
@@ -156,17 +188,33 @@ int main(int argc, char *argv[]) {
 		case 'L': hints.ai_protocol = IPPROTO_UDPLITE; break;
 #endif
 
+#ifdef AI_ADDRCONFIG
 		case 'l': hints.ai_flags |= AI_ADDRCONFIG; break;
+#endif
+#ifdef AI_ALL
 		case 'a': hints.ai_flags |= AI_ALL; break;
+#endif
+#ifdef AI_CANONIDN
 		case 'c': hints.ai_flags |= AI_CANONIDN; break;
+#endif
 		case 'N': hints.ai_flags |= AI_CANONNAME; break;
+#ifdef AI_IDN
 		case 'i': hints.ai_flags |= AI_IDN; break;
+#endif
+#ifdef AI_IDN_ALLOW_UNASSIGNED
 		case 'U': hints.ai_flags |= AI_IDN_ALLOW_UNASSIGNED; break;
+#endif
+#ifdef AI_IDN_USE_STD3_ASCII_RULES
 		case '3': hints.ai_flags |= AI_IDN_USE_STD3_ASCII_RULES; break;
+#endif
 		case 'n': hints.ai_flags |= AI_NUMERICHOST; break;
+#ifdef AI_NUMERICSERV
 		case 'v': hints.ai_flags |= AI_NUMERICSERV; break;
+#endif
 		case 'p': hints.ai_flags |= AI_PASSIVE; break;
+#ifdef AI_V4MAPPED
 		case 'm': hints.ai_flags |= AI_V4MAPPED; break;
+#endif
 
 		case 'h':
 			help(stdout, argv[0]);
