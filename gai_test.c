@@ -54,6 +54,46 @@ static const struct option long_options[] = {
 	{ "AI_V4MAPPED", 0, NULL, 'm' }
 };
 
+static void help(FILE *out, const char *name) {
+			fprintf(out, "Usage: %s [options] [node] [service]\n", name);
+			fprintf(out, "\n");
+			fprintf(out, "Family:\n");
+			fprintf(out, "           AF_UNSPEC (default)\n");
+			fprintf(out, "        -4 AF_INET\n");
+			fprintf(out, "        -6 AF_INET6\n");
+			fprintf(out, "\n");
+			fprintf(out, "Socket Type:\n");
+			fprintf(out, "        -D SOCK_DCCP\n");
+			fprintf(out, "        -d SOCK_DGRAM\n");
+			fprintf(out, "        -R SOCK_RAW\n");
+			fprintf(out, "        -S SOCK_SEQPACKET\n");
+			fprintf(out, "        -s SOCK_STREAM\n");
+			fprintf(out, "\n");
+			fprintf(out, "Protocol:\n");
+			fprintf(out, "        -C IPPROTO_DCCP\n");
+			fprintf(out, "        -P IPPROTO_SCTP\n");
+			fprintf(out, "        -t IPPROTO_TCP\n");
+			fprintf(out, "        -u IPPROTO_UDP\n");
+			fprintf(out, "        -L IPPROTO_UDPLITE\n");
+			fprintf(out, "\n");
+			fprintf(out, "Flags:\n");
+			fprintf(out, "        -l AI_ADDRCONFIG\n");
+			fprintf(out, "        -a AI_ALL\n");
+			fprintf(out, "        -c AI_CANONIDN\n");
+			fprintf(out, "        -N AI_CANONNAME\n");
+			fprintf(out, "        -i AI_IDN\n");
+			fprintf(out, "        -U AI_IDN_ALLOW_UNASSIGNED\n");
+			fprintf(out, "        -3 AI_IDN_USE_STD3_ASCII_RULES\n");
+			fprintf(out, "        -n AI_NUMERICHOST\n");
+			fprintf(out, "        -v AI_NUMERICSERV\n");
+			fprintf(out, "        -p AI_PASSIVE\n");
+			fprintf(out, "        -m AI_V4MAPPED\n");
+			fprintf(out, "\n");
+			fprintf(out, "Options may also be specified in long (--) form by name\n");
+			fprintf(out, "For NULL node or service, specify \"\" or \"-\"\n");
+			fprintf(out, "Either node or service, but not both, may be NULL\n");
+}
+
 int main(int argc, char *argv[]) {
 	struct addrinfo hints;
 	struct addrinfo *results, *tmp;
@@ -98,57 +138,31 @@ int main(int argc, char *argv[]) {
 		case 'p': hints.ai_flags |= AI_PASSIVE; break;
 		case 'm': hints.ai_flags |= AI_V4MAPPED; break;
 
-		case 'h': case '?':
-			fprintf(stderr, "Usage: %s [options] [node] [service]\n", argv[0]);
-			fprintf(stderr, "\n");
-			fprintf(stderr, "Family:\n");
-			fprintf(stderr, "           AF_UNSPEC (default)\n");
-			fprintf(stderr, "        -4 AF_INET\n");
-			fprintf(stderr, "        -6 AF_INET6\n");
-			fprintf(stderr, "\n");
-			fprintf(stderr, "Socket Type:\n");
-			fprintf(stderr, "        -D SOCK_DCCP\n");
-			fprintf(stderr, "        -d SOCK_DGRAM\n");
-			fprintf(stderr, "        -R SOCK_RAW\n");
-			fprintf(stderr, "        -S SOCK_SEQPACKET\n");
-			fprintf(stderr, "        -s SOCK_STREAM\n");
-			fprintf(stderr, "\n");
-			fprintf(stderr, "Protocol:\n");
-			fprintf(stderr, "        -C IPPROTO_DCCP\n");
-			fprintf(stderr, "        -P IPPROTO_SCTP\n");
-			fprintf(stderr, "        -t IPPROTO_TCP\n");
-			fprintf(stderr, "        -u IPPROTO_UDP\n");
-			fprintf(stderr, "        -L IPPROTO_UDPLITE\n");
-			fprintf(stderr, "\n");
-			fprintf(stderr, "Flags:\n");
-			fprintf(stderr, "        -l AI_ADDRCONFIG\n");
-			fprintf(stderr, "        -a AI_ALL\n");
-			fprintf(stderr, "        -c AI_CANONIDN\n");
-			fprintf(stderr, "        -N AI_CANONNAME\n");
-			fprintf(stderr, "        -i AI_IDN\n");
-			fprintf(stderr, "        -U AI_IDN_ALLOW_UNASSIGNED\n");
-			fprintf(stderr, "        -3 AI_IDN_USE_STD3_ASCII_RULES\n");
-			fprintf(stderr, "        -n AI_NUMERICHOST\n");
-			fprintf(stderr, "        -v AI_NUMERICSERV\n");
-			fprintf(stderr, "        -p AI_PASSIVE\n");
-			fprintf(stderr, "        -m AI_V4MAPPED\n");
-			fprintf(stderr, "\n");
-			fprintf(stderr, "Options may also be specified in long (--) form by name\n");
-			fprintf(stderr, "Empty node/service is handled as NULL\n");
+		case 'h':
+			help(stdout, argv[0]);
+			exit(EXIT_SUCCESS);
+
+		case '?':
+			help(stderr, argv[0]);
 			exit(EXIT_FAILURE);
 		}
 	}
 
 	if (optind < argc) {
 		node = argv[optind++];
-		if (node[0] == 0)
+		if (node[0] == 0 || !strcmp(node, "-"))
 			node = NULL;
 	}
 
 	if (optind < argc) {
 		service = argv[optind++];
-		if (service[0] == 0)
+		if (service[0] == 0 || !strcmp(service, "-"))
 			service = NULL;
+	}
+
+	if (node == NULL && service == NULL) {
+		help(stderr, argv[0]);
+		exit(EXIT_FAILURE);
 	}
 
 	ret = getaddrinfo(node, service, &hints, &results);
