@@ -174,27 +174,27 @@ int main(int argc, char *argv[]) {
 	for (tmp = results; tmp != NULL; tmp = tmp->ai_next) {
 		switch (tmp->ai_family) {
 		case AF_UNSPEC: printf("AF_UNSPEC "); break;
-		case AF_INET: printf("AF_INET "); break;
-		case AF_INET6: printf("AF_INET6 "); break;
-		default: printf("AF(%d) ", tmp->ai_family); break;
+		case AF_INET:   printf("AF_INET   "); break;
+		case AF_INET6:  printf("AF_INET6  "); break;
+		default:        printf("AF %-6d ", tmp->ai_family); break;
 		}
 
 		switch (tmp->ai_socktype) {
-		case SOCK_DCCP: printf("SOCK_DCCP "); break;
-		case SOCK_DGRAM: printf("SOCK_DGRAM "); break;
-		case SOCK_RAW: printf("SOCK_RAW "); break;
+		case SOCK_DCCP:      printf("SOCK_DCCP      "); break;
+		case SOCK_DGRAM:     printf("SOCK_DGRAM     "); break;
+		case SOCK_RAW:       printf("SOCK_RAW       "); break;
 		case SOCK_SEQPACKET: printf("SOCK_SEQPACKET "); break;
-		case SOCK_STREAM: printf("SOCK_STREAM "); break;
-		default: printf("SOCK(%d) ", tmp->ai_socktype); break;
+		case SOCK_STREAM:    printf("SOCK_STREAM    "); break;
+		default:             printf("SOCK %-9d ", tmp->ai_socktype); break;
 		}
 
 		switch (tmp->ai_protocol) {
-		case IPPROTO_DCCP: printf("IPPROTO_DCCP "); break;
-		case IPPROTO_SCTP: printf("IPPROTO_SCTP "); break;
-		case IPPROTO_TCP: printf("IPPROTO_TCP "); break;
-		case IPPROTO_UDP: printf("IPPROTO_UDP "); break;
+		case IPPROTO_DCCP:    printf("IPPROTO_DCCP    "); break;
+		case IPPROTO_SCTP:    printf("IPPROTO_SCTP    "); break;
+		case IPPROTO_TCP:     printf("IPPROTO_TCP     "); break;
+		case IPPROTO_UDP:     printf("IPPROTO_UDP     "); break;
 		case IPPROTO_UDPLITE: printf("IPPROTO_UDPLITE "); break;
-		default: printf("PROTO(%d) ", tmp->ai_protocol); break;
+		default:              printf("PROTO %-9d ", tmp->ai_protocol); break;
 		}
 
 		ret = getnameinfo(tmp->ai_addr, tmp->ai_addrlen,
@@ -205,7 +205,7 @@ int main(int argc, char *argv[]) {
 			exit(ret);
 		}
 
-		printf("%s %s", hbuf, sbuf);
+		printf("%-39s %-5s", hbuf, sbuf);
 
 		if (tmp->ai_canonname != NULL)
 			printf(" (%s)", tmp->ai_canonname);
